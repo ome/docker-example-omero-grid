@@ -15,7 +15,7 @@ RUN yum -y install epel-release && \
         nginx python-gunicorn && \
     yum clean all
 
-RUN pip install 'Django<1.9' omego
+RUN pip install 'Django<1.9' 'gunicorn>=19.3' omego
 
 RUN useradd omero && \
     rm /etc/nginx/conf.d/* && \

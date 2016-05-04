@@ -35,6 +35,11 @@ docker run -d --name $PREFIX-master --link $PREFIX-db:db \
 docker run -d --name $PREFIX-slave-1 --link $PREFIX-master:master $IMAGE slave-1
 docker run -d --name $PREFIX-web --link $PREFIX-master:master -P $IMAGEWEB
 
+docker inspect -f {{.State.Running}} $PREFIX-db
+docker inspect -f {{.State.Running}} $PREFIX-master
+docker inspect -f {{.State.Running}} $PREFIX-slave-1
+docker inspect -f {{.State.Running}} $PREFIX-web
+
 echo "Exposed web port:"
 docker port $PREFIX-web
 
