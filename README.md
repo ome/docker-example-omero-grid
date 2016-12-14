@@ -23,7 +23,7 @@ To run the Docker images start a postgres DB:
 
 Then either run a single all-in-one master:
 
-    docker run -d --name omero-master --link postgres:db -e DBUSER=postgres
+    docker run -d --name omero-master --link postgres:db -e DBUSER=postgres \
         -e DBPASS=postgres -e DBNAME=postgres -p 4063:4063 -p 4064:4064 \
         openmicroscopy/omero-grid master
 
@@ -74,6 +74,21 @@ Exposed ports
 
 - `omero-grid`: 4061, 4063, 4064
 - `omero-grid-web`: 8080
+
+
+Example with named volumes
+--------------------------
+
+    docker volume create --name omero-db
+    docker volume create --name omero-data
+
+    docker run -d --name postgres -e POSTGRES_PASSWORD=postgres \
+        -v omero-db:/var/lib/postgresql/data postgres
+    docker run -d --name omero-master --link postgres:db -e DBUSER=postgres \
+        -e DBPASS=postgres -e DBNAME=postgres -v omero-data:/OMERO \
+        -p 4063:4063 -p 4064:4064 openmicroscopy/omero-grid master
+    docker run -d --name omero-web --link omero-master:master -p 8080:8080 \
+        openmicroscopy/omero-grid-web
 
 
 Running without links
