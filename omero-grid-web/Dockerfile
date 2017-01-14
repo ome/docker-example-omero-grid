@@ -4,18 +4,16 @@ MAINTAINER ome-devel@lists.openmicroscopy.org.uk
 # TODO: Use separate Nginx container
 
 RUN yum -y install epel-release && \
-    curl -o /etc/yum.repos.d/zeroc-ice-el7.repo \
-        http://download.zeroc.com/Ice/3.5/el7/zeroc-ice-el7.repo && \
-    yum -y install http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm && \
-    yum -y install \
-        unzip wget \
-        ice ice-python \
-        python-pip \
-        numpy scipy python-matplotlib python-pillow python-tables \
-        nginx python-gunicorn && \
-    yum clean all
+    yum -y install ansible
 
-RUN pip install 'Django<1.9' omego
+RUN mkdir /opt/infrastructure
+ADD omero-grid-web-deps.yml requirements.yml /opt/infrastructure/
+
+RUN cd /opt/infrastructure && \
+    ansible-galaxy install -r requirements.yml && \
+    ansible-playbook omero-grid-web-deps.yml
+
+RUN pip install omego
 
 RUN useradd omero && \
     rm /etc/nginx/conf.d/* && \
