@@ -25,7 +25,7 @@ Then either run a single all-in-one master:
 
     docker run -d --name omero-master --link postgres:db -e DBUSER=postgres \
         -e DBPASS=postgres -e DBNAME=postgres -p 4063:4063 -p 4064:4064 \
-        openmicroscopy/omero-grid master
+        -e ROOTPASS=omero openmicroscopy/omero-grid master
 
 Or run a master and one or more slaves, the configuration must be provided to the master node.
 For example, to run two Processors on separate slaves and all other servers on master:
