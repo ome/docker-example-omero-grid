@@ -4,7 +4,7 @@
   version: 1.0.0
 
 - src: openmicroscopy.ice
-  version: 1.0.0
+  version: 2.1.1
 
 - src: openmicroscopy.nginx
   version: 1.0.0
