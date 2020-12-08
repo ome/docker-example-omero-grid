@@ -8,10 +8,10 @@ set -x
 # OMERO_USER OMERO_PASS PREFIX
 
 FILENAME=$(date +%Y%m%d-%H%M%S-%N).fake
+EXEC="docker-compose exec -T omeroserver"
 OMERO=/opt/omero/server/OMERO.server/bin/omero
 
-docker-compose exec omeroserver sh -c \
-    "mkdir -p /OMERO/DropBox/root && touch /OMERO/DropBox/root/$FILENAME"
+$EXEC sh -c "mkdir -p /OMERO/DropBox/root && touch /OMERO/DropBox/root/$FILENAME"
 
 echo -n "Checking for imported DropBox image $FILENAME "
 # Retry for 4 mins
@@ -19,7 +19,7 @@ i=0
 result=
 while [ $i -lt 60 ]; do
     sleep 4
-    result=$(docker-compose exec omeroserver $OMERO hql -q -s localhost -u $OMERO_USER -w $OMERO_PASS "SELECT COUNT (*) FROM Image WHERE name='$FILENAME'" --style plain)
+    result=$($EXEC $OMERO hql -q -s localhost -u $OMERO_USER -w $OMERO_PASS "SELECT COUNT (*) FROM Image WHERE name='$FILENAME'" --style plain)
     # Strip whitespace
     result=${result//[[:space:]]/}
     if [ "$result" = "0,1" ]; then

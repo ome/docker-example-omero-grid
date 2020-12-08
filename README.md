@@ -1,8 +1,8 @@
-# OMERO.server and OMERO.web (docker-compose)
+# OMERO.server grid and OMERO.web (docker-compose)
 
-[![Actions Status](https://github.com/ome/docker-example-omero/workflows/Build/badge.svg)](https://github.com/ome/docker-example-omero/actions)
+[![Actions Status](https://github.com/ome/docker-example-omero-grid/workflows/Build/badge.svg)](https://github.com/ome/docker-example-omero-grid/actions)
 
-This is an example of running OMERO.server and OMERO.web in Docker.
+This is an example of running [OMERO.server components on multiple nodes using OMERO.grid](http://www.openmicroscopy.org/site/support/omero5/sysadmins/grid.html#nodes-on-multiple-hosts) in Docker.
 
 OMERO.server is listening on the standard OMERO ports `4063` and `4064`.
 OMERO.web is listening on port `4080` (http://localhost:4080/).
