@@ -12,4 +12,5 @@ sleep 30
 
 ./test_processor.sh
 
-./test_dropbox.sh
+# Dropbox isn't working
+# ./test_dropbox.sh
