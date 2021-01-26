@@ -1,0 +1,82 @@
+version: "3"
+
+services:
+
+  database:
+    image: "postgres:11"
+    environment:
+      POSTGRES_USER: omero
+      POSTGRES_DB: omero
+      POSTGRES_PASSWORD: omero
+    networks:
+      - omero
+    volumes:
+      - "database:/var/lib/postgresql/data"
+
+  omeroserver:
+    image: "openmicroscopy/omero-server:5.6.3"
+    environment:
+      CONFIG_omero_db_host: database
+      CONFIG_omero_db_user: omero
+      CONFIG_omero_db_pass: omero
+      CONFIG_omero_db_name: omero
+      CONFIG_omero_server_nodedescriptors: >-
+        master:Blitz-0
+        omeroworker-1:Processor-0,Tables-0
+        omeroworker-2:Indexer-0,PixelData-0
+        omeroworker-3:DropBox,MonitorServer,FileServer,Storm
+      CONFIG_omero_master_host: omeroserver
+      ROOTPASS: omero
+    networks:
+      - omero
+    ports:
+      - "4063:4063"
+      - "4064:4064"
+    volumes:
+      - "omero:/OMERO"
+
+  omeroworker-1:
+    build: ./worker
+    environment:
+      CONFIG_omero_master_host: omeroserver
+      OMERO_WORKER_NAME: omeroworker-1
+    networks:
+      - omero
+    volumes:
+      - "omero:/OMERO"
+
+  omeroworker-2:
+    build: ./worker
+    environment:
+      CONFIG_omero_master_host: omeroserver
+      OMERO_WORKER_NAME: omeroworker-2
+    networks:
+      - omero
+    volumes:
+      - "omero:/OMERO"
+
+  omeroworker-3:
+    build: ./worker
+    environment:
+      CONFIG_omero_master_host: omeroserver
+      OMERO_WORKER_NAME: omeroworker-3
+    networks:
+      - omero
+    volumes:
+      - "omero:/OMERO"
+
+  omeroweb:
+    image: "openmicroscopy/omero-web-standalone:5.6"
+    environment:
+      OMEROHOST: omeroserver
+    networks:
+      - omero
+    ports:
+      - "4080:4080"
+
+networks:
+  omero:
+
+volumes:
+  database:
+  omero:
